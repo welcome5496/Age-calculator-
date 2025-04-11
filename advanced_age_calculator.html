@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Advanced Age Calculator</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('https://source.unsplash.com/1920x1080/?nature,forest') no-repeat center center;
+      background-size: cover;
+      background-attachment: scroll;
+      color: white;
+    }
+
+    .wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 50px 20px;
+    }
+
+    .calculator {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      max-width: 500px;
+      width: 100%;
+    }
+
+    input[type="date"] {
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      font-size: 16px;
+      margin: 10px 0;
+      width: 100%;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+      background-color: #28a745;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    .result {
+      margin-top: 15px;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+
+    .spacer {
+      height: 500px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="calculator">
+      <h1>Advanced Age Calculator</h1>
+      <input type="date" id="birthdate" />
+      <br />
+      <button onclick="calculateAge()">Calculate Age</button>
+      <div class="result" id="result"></div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <script>
+    function calculateAge() {
+      const birthdate = new Date(document.getElementById("birthdate").value);
+      const now = new Date();
+      const diff = now - birthdate;
+
+      if (isNaN(diff)) {
+        document.getElementById("result").innerText = "Please enter a valid date.";
+        return;
+      }
+
+      const seconds = Math.floor(diff / 1000);
+      const minutes = Math.floor(seconds / 60);
+      const hours = Math.floor(minutes / 60);
+      const days = Math.floor(hours / 24);
+      const months = Math.floor(days / 30.44); // average month length
+      const years = Math.floor(months / 12);
+      const pulse = Math.floor(minutes * 70); // average 70 bpm at rest
+
+      document.getElementById("result").innerHTML = `
+        You are:<br>
+        <strong>${years}</strong> years<br>
+        <strong>${months}</strong> months<br>
+        <strong>${days}</strong> days<br>
+        <strong>${minutes}</strong> minutes<br>
+        <strong>${seconds}</strong> seconds<br><br>
+        Your estimated heartbeats so far: <strong>${pulse.toLocaleString()}</strong> beats.
+      `;
+    }
+  </script>
+</body>
+</html>
