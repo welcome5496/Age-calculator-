@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>उम्र कैलकुलेटर</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #fdfbfb, #ebedee);
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 500px;
+      margin: 100px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 20px;
+    }
+    label {
+      font-size: 18px;
+      margin-bottom: 10px;
+      display: block;
+    }
+    input[type="date"] {
+      appearance: none;
+      -webkit-appearance: none;
+      padding: 12px;
+      font-size: 16px;
+      width: 100%;
+      border-radius: 10px;
+      border: 2px solid #ccc;
+      cursor: pointer;
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px 30px;
+      font-size: 16px;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #2980b9;
+    }
+    #result {
+      margin-top: 30px;
+      font-size: 20px;
+      color: #16a085;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>उम्र कैलकुलेटर</h1>
+    <label for="dob">अपनी जन्म तिथि चुनें:</label>
+    <input type="date" id="dob">
+    <button onclick="calculateAge()">उम्र निकालें</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function calculateAge() {
+      const input = document.getElementById("dob").value;
+      const result = document.getElementById("result");
+
+      if (!input) {
+        result.innerText = "कृपया जन्म तिथि चुनें।";
+        return;
+      }
+
+      const dob = new Date(input);
+      const today = new Date();
+
+      let years = today.getFullYear() - dob.getFullYear();
+      let months = today.getMonth() - dob.getMonth();
+      let days = today.getDate() - dob.getDate();
+
+      if (days < 0) {
+        months--;
+        const prevMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+        days += prevMonth.getDate();
+      }
+
+      if (months < 0) {
+        years--;
+        months += 12;
+      }
+
+      result.innerText = `आपकी उम्र है: ${years} वर्ष, ${months} महीने, ${days} दिन।`;
+    }
+  </script>
+</body>
+</html>
