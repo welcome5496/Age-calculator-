@@ -2,41 +2,44 @@
 <html lang="hi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>उम्र कैलकुलेटर</title>
   <style>
     body {
       margin: 0;
       padding: 0;
+      height: 100vh;
+      width: 100vw;
       font-family: 'Segoe UI', sans-serif;
-      background: url('https://i.postimg.cc/QxJ7NhMs/dac3c326-5082-4702-b901-e9d969aa0eee.png') no-repeat center center fixed;
+      background: url('https://i.postimg.cc/QxJ7NhMs/dac3c326-5082-4702-b901-e9d969aa0eee.png') no-repeat center center;
       background-size: cover;
-    }
-    .overlay {
-      background-color: rgba(255, 255, 255, 0.9);
-      max-width: 500px;
-      margin: 100px auto;
-      padding: 30px;
-      border-radius: 20px;
+      background-attachment: fixed;
+      background-position: center;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
       text-align: center;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
     }
     h1 {
-      color: #2c3e50;
-      margin-bottom: 20px;
+      font-size: 36px;
+      text-shadow: 1px 1px 5px black;
     }
     label {
       font-size: 18px;
-      display: block;
-      margin-bottom: 10px;
+      margin-top: 20px;
+      text-shadow: 1px 1px 3px black;
     }
     input[type="date"] {
       padding: 12px;
       font-size: 16px;
-      width: 100%;
+      width: 250px;
       border-radius: 10px;
       border: 2px solid #ccc;
       cursor: pointer;
+      margin-top: 10px;
     }
     button {
       margin-top: 20px;
@@ -54,7 +57,8 @@
     #result {
       margin-top: 30px;
       font-size: 20px;
-      color: #16a085;
+      color: #ffffff;
+      text-shadow: 1px 1px 3px black;
     }
     .microphone {
       margin-top: 10px;
@@ -68,14 +72,14 @@
   </style>
 </head>
 <body>
-  <div class="overlay">
-    <h1>उम्र कैलकुलेटर</h1>
-    <label for="dob">अपनी जन्म तिथि चुनें:</label>
-    <input type="date" id="dob">
-    <button onclick="calculateAge()">उम्र निकालें</button>
-    <button class="microphone" onclick="startListening()">🎤 बोलकर जन्म तिथि बताएं</button>
-    <div id="result"></div>
-  </div>
+  <h1>उम्र कैलकुलेटर</h1>
+  <label for="dob">अपनी जन्म तिथि चुनें:</label>
+  <input type="date" id="dob">
+  <br>
+  <button onclick="calculateAge()">उम्र निकालें</button>
+  <br>
+  <button class="microphone" onclick="startListening()">🎤 बोलकर जन्म तिथि बताएं</button>
+  <div id="result"></div>
 
   <script>
     function calculateAge() {
@@ -112,22 +116,30 @@
     }
 
     function speakHindi(text) {
-      const msg = new SpeechSynthesisUtterance();
-      msg.lang = "hi-IN";
-      msg.text = text;
-      window.speechSynthesis.speak(msg);
+      const synth = window.speechSynthesis;
+      let voices = synth.getVoices();
+
+      if (!voices.length) {
+        synth.onvoiceschanged = () => speakHindi(text);
+        return;
+      }
+
+      const hindiVoice = voices.find(v => v.lang.includes('hi')) || voices[0];
+      const msg = new SpeechSynthesisUtterance(text);
+      msg.voice = hindiVoice;
+      msg.lang = hindiVoice.lang;
+      synth.speak(msg);
     }
 
-    // Voice Input using Speech Recognition API
     const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-    recognition.lang = "hi-IN"; // Hindi language
+    recognition.lang = "hi-IN";
     recognition.continuous = false;
     recognition.interimResults = false;
 
     function startListening() {
       recognition.start();
       recognition.onresult = function (event) {
-        const date = event.results[0][0].transcript; // Captured date as speech text
+        const date = event.results[0][0].transcript;
         processDateInput(date);
       };
     }
@@ -135,11 +147,8 @@
     function processDateInput(date) {
       const result = document.getElementById("result");
       result.innerText = `आपने कहा: ${date}`;
-
-      // Try to set the date in the input field if possible
-      // For simplicity, this assumes the format is correct. You can enhance it for validation.
       const dobInput = document.getElementById("dob");
-      dobInput.value = date; // This should be a valid date format like "YYYY-MM-DD"
+      dobInput.value = date;
     }
   </script>
 </body>
