@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>उम्र कैलकुलेटर</title>
+  <title> आंगनबाड़ी उम्र कैलकुलेटर</title>
   <style>
     body {
       margin: 0;
@@ -11,7 +11,7 @@
       height: 100vh;
       width: 100vw;
       font-family: 'Segoe UI', sans-serif;
-      background: url('https://i.postimg.cc/cH484MZd/IMG-20230314-143324-302-1.webp') no-repeat center center;
+      background: url('https://i.postimg.cc/QxJ7NhMs/dac3c326-5082-4702-b901-e9d969aa0eee.png') no-repeat center center;
       background-size: cover;
       background-attachment: fixed;
       background-position: center;
@@ -60,15 +60,6 @@
       color: #ffffff;
       text-shadow: 1px 1px 3px black;
     }
-    .microphone {
-      margin-top: 10px;
-      padding: 10px;
-      background-color: #e74c3c;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-    }
   </style>
 </head>
 <body>
@@ -77,8 +68,6 @@
   <input type="date" id="dob">
   <br>
   <button onclick="calculateAge()">उम्र निकालें</button>
-  <br>
-  <button class="microphone" onclick="startListening()">🎤 बोलकर जन्म तिथि बताएं</button>
   <div id="result"></div>
 
   <script>
@@ -129,26 +118,6 @@
       msg.voice = hindiVoice;
       msg.lang = hindiVoice.lang;
       synth.speak(msg);
-    }
-
-    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-    recognition.lang = "hi-IN";
-    recognition.continuous = false;
-    recognition.interimResults = false;
-
-    function startListening() {
-      recognition.start();
-      recognition.onresult = function (event) {
-        const date = event.results[0][0].transcript;
-        processDateInput(date);
-      };
-    }
-
-    function processDateInput(date) {
-      const result = document.getElementById("result");
-      result.innerText = `आपने कहा: ${date}`;
-      const dobInput = document.getElementById("dob");
-      dobInput.value = date;
     }
   </script>
 </body>
